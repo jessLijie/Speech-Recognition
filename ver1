@@ -1,0 +1,14 @@
+import speech_recognition as sr
+
+robot = sr.Recognizer()
+with sr.Microphone() as source:
+    print("Speaking... ")
+    audio = robot.listen(source)
+    try:
+        words = robot.recognize_google(audio)
+        words = words.lower()
+        if 'jess' in words :
+            print("Yes, im listening, you said: {}".format(words))
+
+    except:
+        pass
