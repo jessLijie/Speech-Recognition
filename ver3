@@ -1,0 +1,61 @@
+import speech_recognition as sr
+import datetime
+import pyttsx3
+import pywhatkit
+import wikipedia
+import pyjokes
+
+robot = sr.Recognizer()
+speaker = pyttsx3.init()
+voices = speaker.getProperty('voices')
+speaker.setProperty('voice', voices[1].id)
+
+
+with sr.Microphone() as source:
+    try:
+        print("Speaking... ")
+        audio = robot.listen(source)
+        words = robot.recognize_google(audio)
+        words = words.lower()
+        if 'jess' in words :
+            print("Hello")
+            speaker.say("Yes, im listening")
+            speaker.say("What can I do for you?")
+            speaker.runAndWait()
+
+            audio = robot.listen(source)
+            instruction = robot.recognize_google(audio)
+            print(instruction)
+            instruction = instruction.lower()
+
+            if 'play' in instruction:
+                song = instruction.replace ('play','')
+                speaker.say("playing" + song)
+                speaker.runAndWait()
+                pywhatkit.playonyt(song)
+
+            elif 'time' in instruction:
+                time = datetime.datetime.now().strftime('%I:%M %p' )
+                print("Current time is " + time)
+                speaker.say("Current time is" + time)
+                speaker.runAndWait()
+
+            elif 'search' in instruction:
+                something = instruction.replace('search',' ')
+                info = wikipedia.summary(something, 1)
+                print(info)
+                speaker.say(info)
+                speaker.runAndWait()
+
+            elif 'joke' in instruction:
+                haha = pyjokes.get_joke()
+                print(haha)
+                speaker.say(haha)
+                speaker.runAndWait()
+
+        else:
+            speaker.say("Who are you?")
+            speaker.runAndWait()
+
+    except:
+        pass
